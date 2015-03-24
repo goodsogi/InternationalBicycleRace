@@ -8,6 +8,7 @@ public class BikerModel {
     private String email;
     private String nationality;
     private String profileImageUrl;
+    private String speed;
 
 
     public String getName() {
@@ -40,5 +41,13 @@ public class BikerModel {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(String speed) {
+        this.speed = speed;
     }
 }

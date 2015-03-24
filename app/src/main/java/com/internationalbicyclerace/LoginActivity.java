@@ -1,7 +1,9 @@
 package com.internationalbicyclerace;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,11 +21,16 @@ import com.pluslibrary.utils.PlusToaster;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by johnny on 15. 3. 23.
  */
 public class LoginActivity extends Activity {
 
+
+    private String mUserEmail;
 
     /**
      * Called when the activity is first created.
@@ -38,8 +45,11 @@ public class LoginActivity extends Activity {
     }
 
     public void doFacebookLogin(View v) {
+        //사용자 이메일 가져오기 퍼미션
+        List<String> permissions = new ArrayList<String>();
+        permissions.add("email");
         // start Facebook Login
-        Session.openActiveSession(this, true, new Session.StatusCallback() {
+        Session.openActiveSession(this, true, permissions, new Session.StatusCallback() {
 
             // callback when session changes state
             @Override
@@ -69,6 +79,7 @@ public class LoginActivity extends Activity {
     private void sendUserInfoToServer(BikerModel model) {
 
         RequestParams params = new RequestParams();
+        params.put("email", model.getEmail());
         params.put("name", model.getName());
         params.put("profileImageUrl", model.getProfileImageUrl());
 
@@ -78,9 +89,13 @@ public class LoginActivity extends Activity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // 서버 결과가 success이면 MainActivity로 이동 !!
-                if(response.opt("result").equals("success"))
-                goToMainActivity(); else {
+                if(response.opt("result").equals("success")) {
+                    goToMainActivity();
+                    saveLoginInfoToSharedPreference();
+
+                } else {
                     // 서버 결과가 fail인 경우 처리!!
+
                 }
             }
 
@@ -92,6 +107,18 @@ public class LoginActivity extends Activity {
 
         });
 
+
+        mUserEmail = model.getEmail();
+
+    }
+
+    private void saveLoginInfoToSharedPreference() {
+        SharedPreferences sharedPreference = getSharedPreferences(
+                IBRConstants.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor e = sharedPreference.edit();
+        e.putBoolean(IBRConstants.KEY_IS_SIGNUP, true);
+        e.putString(IBRConstants.KEY_USER_EMAIL, mUserEmail);
+        e.commit();
     }
 
     private BikerModel parseResponse(Response response) {
@@ -103,6 +130,7 @@ public class LoginActivity extends Activity {
             //수정이 필요할 수 있음!!
             //model.setEmail(jsonObject.optString("id"));
             model.setName(jsonObject.optString("name"));
+            model.setEmail(jsonObject.optString("email"));
             model.setProfileImageUrl("http://graph.facebook.com/"+jsonObject.optString("id")+"/picture?type=large");
 
 

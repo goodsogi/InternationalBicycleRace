@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="85dp" android:gravity="center_vertical">
+
+    <FrameLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp" android:layout_marginLeft="15dp">
+    <ImageView
+    android:id="@+id/profileImage"
+    android:layout_width="72dp"
+    android:layout_height="72dp" android:scaleType="fitStart"   />
+
+        <ImageView
+            android:id="@+id/medal"
+            android:layout_width="32dp"
+            android:layout_height="32dp"  />
+
+    </FrameLayout>
+
+    <TextView android:id="@+id/userName"
+        android:layout_width="0px"
+        android:layout_weight="1"
+        android:layout_height="72dp"   android:textSize="18sp"
+        android:textStyle="bold" android:textColor="#666666"
+        android:gravity="center"/>
+
+    <TextView android:id="@+id/userSpeed"
+        android:layout_width="wrap_content" android:textSize="35sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_height="72dp"   />
+    <TextView
+        android:layout_width="wrap_content" android:textSize="18sp"
+        android:gravity="center"
+        android:text="km/h"
+        android:textStyle="bold"
+        android:layout_height="72dp" android:layout_marginRight="15dp"  />
+</LinearLayout>
