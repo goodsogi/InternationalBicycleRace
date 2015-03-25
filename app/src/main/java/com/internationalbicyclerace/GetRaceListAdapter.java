@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -17,10 +18,12 @@ import java.util.ArrayList;
  */
 public class GetRaceListAdapter extends CommonAdapter<BikerModel> {
 
-    public GetRaceListAdapter(Context context, ArrayList<BikerModel> datas) {
-        super(context, R.layout.race_list_item, datas);
-        // TODO Auto-generated constructor stub
+    private final String mMyEmail;
+    private int mMyRowPosition;
 
+    public GetRaceListAdapter(Context context, ArrayList<BikerModel> datas, String myEmail) {
+        super(context, R.layout.race_list_item, datas);
+        mMyEmail = myEmail;
     }
 
 
@@ -32,6 +35,9 @@ public class GetRaceListAdapter extends CommonAdapter<BikerModel> {
                     parent, false);
         }
 
+
+
+
         ImageView profileImage = PlusViewHolder.get(convertView, R.id.profileImage);
         mImageLoader.displayImage(mDatas.get(position).getProfileImageUrl(), profileImage, mOptionRound);
 
@@ -42,10 +48,30 @@ public class GetRaceListAdapter extends CommonAdapter<BikerModel> {
         TextView userName = PlusViewHolder.get(convertView, R.id.userName);
         userName.setText(mDatas.get(position).getName());
 
+        TextView userRank = PlusViewHolder.get(convertView, R.id.userRank);
+        userRank.setText(String.valueOf(position+1));
+
+
         TextView userSpeed = PlusViewHolder.get(convertView, R.id.userSpeed);
         userSpeed.setText(mDatas.get(position).getSpeed());
 
+
+
+
+
+        ImageView myRow = PlusViewHolder.get(convertView, R.id.myRow);
+        myRow.setSelected(mDatas.get(position).getEmail().equals(mMyEmail));
+        if(mDatas.get(position).getEmail().equals(mMyEmail)) {
+            mMyRowPosition = position;
+
+        }
+
         return convertView;
+    }
+
+    public int getMyRowPosition() {
+
+        return mMyRowPosition;
     }
 
     private int getMedalResource(int position) {

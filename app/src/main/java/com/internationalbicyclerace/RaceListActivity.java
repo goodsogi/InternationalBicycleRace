@@ -116,14 +116,17 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
     private void makeList(String response) {
         ListView list = (ListView) findViewById(R.id.raceList);
         ArrayList<BikerModel> datas = new GetRaceListParser().doIt(response);
-        list.setAdapter(new GetRaceListAdapter(this,
-                datas));
+        GetRaceListAdapter adapter = new GetRaceListAdapter(this,
+                datas,mUserEmail);
+        list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
         });
+
+        list.setSelection(adapter.getMyRowPosition());
 
         mProgressDialog.dismiss();
 
@@ -133,5 +136,40 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
         SharedPreferences sharedPreference = getSharedPreferences(
                 IBRConstants.PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreference.getString(IBRConstants.KEY_USER_EMAIL, "");
+    }
+
+    @Override
+    public void onDestroy() {
+        stopLocationFinder();
+        deleteRecordInServer();
+        super.onDestroy();
+    }
+
+    private void stopLocationFinder() {
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
+        locationFinder.removeLocationUpdate();
+    }
+
+    private void deleteRecordInServer() {
+
+        RequestParams params = new RequestParams();
+        params.put("userEmail", mUserEmail);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post(IBRApiConstants.DELETE_RACE_RECORD, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                //if (response.opt("result").equals("success"))
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+
+            }
+
+
+        });
+
     }
 }

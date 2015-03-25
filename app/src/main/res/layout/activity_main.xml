@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:gravity="center">
+    android:layout_height="match_parent" android:gravity="center" android:background="@drawable/race_start">
 
     <Button android:layout_width="300dp"
-        android:layout_height="50dp" android:text="시작" android:onClick="doStart" />
+        android:layout_height="75dp" android:text="START" android:textSize="22sp" android:onClick="doStart" />
 
 </LinearLayout>

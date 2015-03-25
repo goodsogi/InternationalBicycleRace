@@ -121,7 +121,7 @@ public class IBRLocationFinder implements android.location.LocationListener {
 		// 네트워크 제공자가 제공하는 위치. GPS를 사용하면 변경 필요!!
 		mIsGpsCatched = false;
 		mLocationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+				LocationManager.GPS_PROVIDER, 1000, 0, this);
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
