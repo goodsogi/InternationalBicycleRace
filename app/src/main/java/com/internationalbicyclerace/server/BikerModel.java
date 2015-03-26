@@ -1,4 +1,4 @@
-package com.internationalbicyclerace;
+package com.internationalbicyclerace.server;
 
 /**
  * Created by johnny on 15. 3. 23.
@@ -9,6 +9,7 @@ public class BikerModel {
     private String nationality;
     private String profileImageUrl;
     private String speed;
+    private String facebookId;
 
 
     public String getName() {
@@ -49,5 +50,13 @@ public class BikerModel {
 
     public void setSpeed(String speed) {
         this.speed = speed;
+    }
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
     }
 }

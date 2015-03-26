@@ -5,7 +5,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="54dp" android:background="#3b4d74"
-        android:text="RANK" android:textColor="#ffffff"
+        android:text="@string/rank" android:textColor="#ffffff"
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center"

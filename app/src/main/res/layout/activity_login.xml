@@ -2,12 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" android:gravity="center">
-    <Button
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="6dp"
+        android:clickable="true"
+        android:text="@string/login_with_facebook"
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+android:paddingLeft="100dp"
         android:background="@drawable/facebook_login"
         android:onClick="doFacebookLogin" />
 </LinearLayout>

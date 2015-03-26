@@ -3,6 +3,6 @@
     android:layout_height="match_parent" android:gravity="center" android:background="@drawable/race_start">
 
     <Button android:layout_width="300dp"
-        android:layout_height="75dp" android:text="START" android:textSize="22sp" android:onClick="doStart" />
+        android:layout_height="75dp" android:text="@string/start" android:textSize="22sp" android:onClick="doStart" />
 
 </LinearLayout>

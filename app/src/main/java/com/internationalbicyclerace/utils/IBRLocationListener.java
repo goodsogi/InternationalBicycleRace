@@ -1,4 +1,4 @@
-package com.internationalbicyclerace;
+package com.internationalbicyclerace.utils;
 
 import android.location.Location;
 

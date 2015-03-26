@@ -3,4 +3,12 @@
 
     <string name="app_id">727450297375918</string>
     <string name="action_settings">settings</string>
+    <string name="succeeded_facebook_login">succeeded in facebook login!</string>
+    <string name="try_after_gps_catched">Try again after GPS is catched</string>
+    <string name="wanna_exit">Wanna exit app?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="start">START</string>
+    <string name="rank">RANK</string>
+    <string name="login_with_facebook">Login with Facebook</string>
 </resources>

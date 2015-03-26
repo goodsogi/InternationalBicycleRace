@@ -1,4 +1,4 @@
-package com.internationalbicyclerace;
+package com.internationalbicyclerace.intro;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,8 +8,15 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.Bundle;
 
+import com.internationalbicyclerace.IBRConstants;
+import com.internationalbicyclerace.utils.IBRLocationFinder;
+import com.internationalbicyclerace.utils.IBRLocationListener;
+import com.internationalbicyclerace.R;
+import com.internationalbicyclerace.login.LoginActivity;
+import com.internationalbicyclerace.main.MainActivity;
 
-public class SplashActivity extends Activity implements IBRLocationListener{
+
+public class SplashActivity extends Activity implements IBRLocationListener {
 
     private static final int DELAY_TIME = 3000;
     private boolean signUp;
@@ -43,6 +50,7 @@ public class SplashActivity extends Activity implements IBRLocationListener{
 
                 Intent intent = new Intent(SplashActivity.this, isSignUp() ? MainActivity.class : LoginActivity.class);
                 startActivity(intent);
+                finish();
 
             }
         }, DELAY_TIME);

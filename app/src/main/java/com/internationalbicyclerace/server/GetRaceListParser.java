@@ -1,4 +1,6 @@
-package com.internationalbicyclerace;
+package com.internationalbicyclerace.server;
+
+import com.internationalbicyclerace.server.BikerModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ public class GetRaceListParser {
                 data.setEmail(jsonObject.optString("email"));
                 data.setProfileImageUrl(jsonObject.optString("profileImage"));
                 data.setSpeed(jsonObject.optString("speed"));
+                data.setFacebookId(jsonObject.optString("facebookId"));
                 model.add(data);
             }
 

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">국제자전거경주대회</string>
+
+    <string name="app_id">727450297375918</string>
+    <string name="action_settings">settings</string>
+    <string name="succeeded_facebook_login">페이스북 로그인 성공!</string>
+    <string name="try_after_gps_catched">GPS가 잡힌 다음 시도해주세요</string>
+    <string name="wanna_exit">앱을 종료하시겠습니까?</string>
+    <string name="no">아니오</string>
+    <string name="yes">예</string>
+    <string name="start">출발</string>
+    <string name="rank">순위</string>
+    <string name="login_with_facebook">페이스북으로 로그인</string>
+</resources>
