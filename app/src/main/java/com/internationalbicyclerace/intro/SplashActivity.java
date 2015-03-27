@@ -16,7 +16,7 @@ import com.internationalbicyclerace.login.LoginActivity;
 import com.internationalbicyclerace.main.MainActivity;
 
 
-public class SplashActivity extends Activity implements IBRLocationListener {
+public class SplashActivity extends Activity {
 
     private static final int DELAY_TIME = 3000;
     private boolean signUp;
@@ -34,7 +34,7 @@ public class SplashActivity extends Activity implements IBRLocationListener {
     }
 
     private void runLocationFinder() {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
         if(locationFinder.canGetLocation()) {
             locationFinder.getCurrentLocation();
             goToNextActivity();
@@ -57,11 +57,7 @@ public class SplashActivity extends Activity implements IBRLocationListener {
     }
 
 
-    @Override
-    public void onGPSCatched(Location location) {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
-        locationFinder.removeLocationUpdate();
-    }
+
 
     public boolean isSignUp() {
         SharedPreferences sharedPreference = getSharedPreferences(

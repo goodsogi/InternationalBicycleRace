@@ -11,4 +11,28 @@
     <string name="start">출발</string>
     <string name="rank">순위</string>
     <string name="login_with_facebook">페이스북으로 로그인</string>
+    <string name="wanna_use_location_service">위치 서비스를 사용하시겠습니까?</string>
+    <string name="confirm">확인</string>
+    <string name="rank_refresh_interval">순위 갱신 시간 간격</string>
+    <string name="choose_rank_refresh_interval">순위 갱신하는 시간 간격을 선택하세요</string>
+    <string name="interval">시간 간격</string>
+    <string name="donation">기부</string>
+    <string name="help_developer">개발자에게 힘을 주세요</string>
+    <string name="vitamin">비타민</string>
+    <string name="I_will_make_better_app">욜씸히 앱 만들겠습니다!</string>
+
+    <string-array name="refreshInterval">
+        <item>1초</item>
+        <item>5초</item>
+        <item>10초</item>
+        <item>30초</item>
+    </string-array>
+
+    <string-array name="refreshIntervalValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
 </resources>

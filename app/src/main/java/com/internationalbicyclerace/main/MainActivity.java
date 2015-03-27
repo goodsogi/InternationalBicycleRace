@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 
+import com.internationalbicyclerace.utils.AdManager;
 import com.internationalbicyclerace.utils.IBRLocationFinder;
 import com.internationalbicyclerace.utils.IBRLocationListener;
 import com.internationalbicyclerace.R;
@@ -16,7 +17,7 @@ import com.pluslibrary.utils.PlusClickGuard;
 import com.pluslibrary.utils.PlusToaster;
 
 
-public class MainActivity extends Activity implements IBRLocationListener {
+public class MainActivity extends Activity {
 
     private boolean GPSCatched;
 
@@ -24,7 +25,7 @@ public class MainActivity extends Activity implements IBRLocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        showAd();
     }
 
 
@@ -44,16 +45,20 @@ public class MainActivity extends Activity implements IBRLocationListener {
     }
 
     public boolean isGPSCatched() {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
 
         return locationFinder.isGpsCatched();
     }
+    private void showAd() {
+        AdManager.showAd(this);
 
-    @Override
-    public void onGPSCatched(Location location) {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
-        locationFinder.removeLocationUpdate();
     }
+
+    public void launchSettingActivity(View v) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onDestroy() {
@@ -62,7 +67,7 @@ public class MainActivity extends Activity implements IBRLocationListener {
     }
 
     private void stopLocationFinder() {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
         locationFinder.removeLocationUpdate();
     }
 

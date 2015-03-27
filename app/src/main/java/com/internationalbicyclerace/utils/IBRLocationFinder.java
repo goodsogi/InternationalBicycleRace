@@ -5,13 +5,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.internationalbicyclerace.IBRConstants;
+import com.internationalbicyclerace.R;
+import com.pluslibrary.utils.PlusLogger;
 
 /**
  * 현재 위치 가져오기
@@ -22,6 +28,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 public class IBRLocationFinder implements android.location.LocationListener {
 
     private static final int REQUEST_LOCATION_AGREEMENT = 22;
+    private static final String IBR_LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
     private Activity mActivity;
 	private LocationManager mLocationManager;
 	private String mProvider;
@@ -33,23 +40,23 @@ public class IBRLocationFinder implements android.location.LocationListener {
 
     static private IBRLocationListener mListener;
 
-    private IBRLocationFinder(Activity activity, IBRLocationListener listener) {
+    private IBRLocationFinder(Activity activity) {
 		mActivity = activity;
-        mListener = listener;
 
         mLocationManager = (LocationManager) mActivity
                 .getSystemService(Context.LOCATION_SERVICE);
 
 	}
 
-    public static IBRLocationFinder getInstance(Activity activity,IBRLocationListener listener) {
+    public static IBRLocationFinder getInstance(Activity activity) {
         if(instance == null) {
-            return instance = new IBRLocationFinder(activity,listener);
+             instance = new IBRLocationFinder(activity);
         }
-        else{
-            mListener = listener;
             return instance;
-        }
+    }
+    
+    public void setLocationListener(IBRLocationListener listener) {
+        mListener = listener;
     }
 	
 	
@@ -89,25 +96,24 @@ public class IBRLocationFinder implements android.location.LocationListener {
 	public void moveToSetting() {
 
 		new AlertDialog.Builder(mActivity)
-				.setTitle("알림")
-				.setMessage("위치 서비스를 사용하시겠습니까?")
-				.setNeutralButton("확인",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								mActivity
-										.startActivityForResult(
-												new Intent(
-														android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-												IBRLocationFinder.REQUEST_LOCATION_AGREEMENT);
-							}
-						})
+				.setMessage(mActivity.getString(R.string.wanna_use_location_service))
+				.setNeutralButton(mActivity.getString(R.string.confirm),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                mActivity
+                                        .startActivityForResult(
+                                                new Intent(
+                                                        Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+                                                IBRLocationFinder.REQUEST_LOCATION_AGREEMENT);
+                            }
+                        })
 				.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface dialog) {
-					}
-				}).show();
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                    }
+                }).show();
 
 	}
 
@@ -120,8 +126,18 @@ public class IBRLocationFinder implements android.location.LocationListener {
 		// 1000, 10, this);
 		// 네트워크 제공자가 제공하는 위치. GPS를 사용하면 변경 필요!!
 		mIsGpsCatched = false;
-		mLocationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 3000, 0, this);
+//		mLocationManager.requestLocationUpdates(
+//				LocationManager.GPS_PROVIDER, 3000, 0, this);
+
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(mActivity);
+
+        int refreshInterval = getRefreshInterval(Integer.parseInt(preferences
+                .getString(IBRConstants.KEY_PREF_REFRESH_INTERVAL, "1")));
+
+        //테스트용
+        mLocationManager.requestLocationUpdates(
+                IBR_LOCATION_PROVIDER, refreshInterval, 0, this);
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -138,11 +154,28 @@ public class IBRLocationFinder implements android.location.LocationListener {
 
 	}
 
-	@Override
+    private int getRefreshInterval(int value) {
+        switch (value) {
+            case 0:
+                return 1000;
+            case 1:
+                return 5 * 1000;
+            case 2:
+                return 10 * 1000;
+            case 3:
+                return 30 * 1000;
+        }
+        return 1000;
+    }
+
+
+    @Override
 	public void onLocationChanged(Location location) {
 
+        PlusLogger.doIt("onLocationChanged");
+
         mIsGpsCatched = true;
-        mListener.onGPSCatched(location);
+        if(mListener != null) mListener.onGPSCatched(location);
 
 		
 	}
@@ -175,4 +208,11 @@ public class IBRLocationFinder implements android.location.LocationListener {
     }
 
 
+    public void setRefreshInterval(int refreshInterval) {
+        mLocationManager.removeUpdates(this);
+
+        int refreshIntervalInMilliSec = getRefreshInterval(refreshInterval);
+        mLocationManager.requestLocationUpdates(
+                IBR_LOCATION_PROVIDER, refreshIntervalInMilliSec, 0, this);
+    }
 }

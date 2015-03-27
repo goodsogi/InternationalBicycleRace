@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/rank_refresh_interval" >
+        <ListPreference
+            android:entries="@array/refreshInterval"
+            android:entryValues="@array/refreshIntervalValues"
+            android:key="prefRefreshInterval"
+            android:summary="@string/choose_rank_refresh_interval"
+            android:title="@string/interval" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/donation" >
+        <Preference
+            android:key="button"
+            android:summary="@string/help_developer"
+            android:title="@string/vitamin" />
+    </PreferenceCategory>
+
+    <!-- <PreferenceCategory android:title="지도 줌 레벨" > -->
+
+
+    <!-- <ListPreference -->
+    <!-- android:entries="@array/zoomLevel" -->
+    <!-- android:entryValues="@array/zoomLevelValues" -->
+    <!-- android:key="prefZoomLevel" -->
+    <!-- android:summary="지도의 줌 레벨을 선택하세요" -->
+    <!-- android:title="줌 레벨" /> -->
+    <!-- </PreferenceCategory> -->
+
+</PreferenceScreen>

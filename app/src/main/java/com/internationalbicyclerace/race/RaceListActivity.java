@@ -17,6 +17,7 @@ import com.internationalbicyclerace.server.BikerModel;
 import com.internationalbicyclerace.server.GetRaceListParser;
 import com.internationalbicyclerace.IBRApiConstants;
 import com.internationalbicyclerace.IBRConstants;
+import com.internationalbicyclerace.utils.AdManager;
 import com.internationalbicyclerace.utils.IBRLocationFinder;
 import com.internationalbicyclerace.utils.IBRLocationListener;
 import com.internationalbicyclerace.R;
@@ -51,6 +52,12 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
         mIsFirstUploadSpeed = true;
         setUserEmail();
         startRace();
+        showAd();
+
+    }
+
+    private void showAd() {
+        AdManager.showAd(this);
 
     }
 
@@ -59,8 +66,9 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
     }
 
     private void startRace() {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
-        locationFinder.getCurrentLocation();
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
+        locationFinder.setLocationListener(this);
+        //locationFinder.getCurrentLocation();
     }
 
 //    private void showProgressDialog(String message) {
@@ -244,7 +252,7 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
     }
 
     private void stopLocationFinder() {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this, this);
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
         locationFinder.removeLocationUpdate();
     }
 

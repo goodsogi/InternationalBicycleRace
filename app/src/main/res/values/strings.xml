@@ -11,4 +11,26 @@
     <string name="start">START</string>
     <string name="rank">RANK</string>
     <string name="login_with_facebook">Login with Facebook</string>
+    <string name="wanna_use_location_service">Wanna use location service?</string>
+    <string name="confirm">OK</string>
+    <string name="rank_refresh_interval">Rank Refresh Interval</string>
+    <string name="choose_rank_refresh_interval">Choose Rank Refresh Interval</string>
+    <string name="interval">Interval</string>
+    <string name="donation">Donation</string>
+    <string name="help_developer">Please Help developer</string>
+    <string name="vitamin">Vitamin</string>
+    <string name="I_will_make_better_app">I will make good apps!</string>
+
+    <string-array name="refreshInterval">
+        <item>1sec</item>
+        <item>5sec</item>
+        <item>10sec</item>
+        <item>30sec</item>
+    </string-array>
+    <string-array name="refreshIntervalValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>
