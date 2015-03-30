@@ -41,7 +41,7 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
     private int userEmail;
     private String mUserEmail;
     private boolean mIsFirstUploadSpeed;
-    //private ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
 
     /** Called when the activity is first created. */
     @Override
@@ -49,12 +49,34 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_race_list);
+
         mIsFirstUploadSpeed = true;
         setUserEmail();
+        showProgressDialog(getString(R.string.updating_rank));
         startRace();
         showAd();
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
+        if(locationFinder.isLocationUpdateRemoved()) locationFinder.getCurrentLocation();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        removeLocationUpdate();
+
+    }
+
+    private void removeLocationUpdate() {
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
+        locationFinder.removeLocationUpdate();
+    }
+
 
     private void showAd() {
         AdManager.showAd(this);
@@ -71,16 +93,17 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
         //locationFinder.getCurrentLocation();
     }
 
-//    private void showProgressDialog(String message) {
-//        mProgressDialog = new ProgressDialog(this);
-//        mProgressDialog.setMessage(message);
-//        mProgressDialog.show();
-//    }
+    private void showProgressDialog(String message) {
+        if(mProgressDialog != null && mProgressDialog.isShowing()) return;
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.show();
+    }
 
 
     @Override
     public void onGPSCatched(Location location) {
-        //showProgressDialog("순위 갱신 중...");
+        showProgressDialog(getString(R.string.updating_rank));
         sendSpeedToServer(location);
     }
 
@@ -100,8 +123,14 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
     }
 
     private void updateSpeedInServer(Location location) {
+        //원래코드
+//        int speed = (int) location.getSpeed() * 60 * 60
+//                / 1000;
+
+        //더 정확한 속도를 위해 100을 곱함
         int speed = (int) location.getSpeed() * 60 * 60
-                / 1000;
+                / 1000*100;
+
 
         RequestParams params = new RequestParams();
         params.put("userEmail", mUserEmail);
@@ -129,8 +158,13 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
     }
 
     private void insertSpeedToServer(Location location) {
+        //원래코드
+//        int speed = (int) location.getSpeed() * 60 * 60
+//                / 1000;
+
+        //더 정확한 속도를 위해 100을 곱함
         int speed = (int) location.getSpeed() * 60 * 60
-                / 1000;
+                / 1000*100;
 
         RequestParams params = new RequestParams();
         params.put("userEmail", mUserEmail);
@@ -169,9 +203,14 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                dismissProgressDialog();
                 makeList(responseString);
             }
         });
+    }
+
+    private void dismissProgressDialog() {
+        if(mProgressDialog.isShowing()) mProgressDialog.dismiss();
     }
 
     private void makeList(String response) {
@@ -200,7 +239,7 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
 //            }
 //        }, 2000);
 
-        //mProgressDialog.dismiss();
+
 
     }
 
@@ -213,29 +252,42 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
     }
 
     private void showFacebookPage(String facebookId) {
-//        Intent intent =getOpenFacebookIntent(facebookId);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(intent);
-
-
-        Intent intent = new Intent(this, WebviewActivity.class);
-        intent.putExtra(IBRConstants.KEY_URL, "https://www.facebook.com/" +facebookId);
+        Intent intent =getOpenFacebookIntent(facebookId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY
+                | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         startActivity(intent);
+
+
+//        Intent intent = new Intent(this, WebviewActivity.class);
+//        intent.putExtra(IBRConstants.KEY_URL, "https://www.facebook.com/" +facebookId);
+//        startActivity(intent);
     }
 
     private Intent getOpenFacebookIntent(String facebookId) {
 
-        return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
+//        return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
 
         //fb://page/" + facebookId가 프로필 페이지가 열리지 않음, fb://profile/" + facebookId는 이용할 수 없다고 나옴
+        try{
+            // open in Facebook app
+            getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            final String facebookScheme = String.format("fb://profile/%s", facebookId);
+            return new Intent(Intent.ACTION_VIEW, Uri.parse(facebookScheme));
+
+        } catch (Exception e) {
+            // open in browser
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
+        }
+
 //        try{
 //            // open in Facebook app
 //            getPackageManager().getPackageInfo("com.facebook.katana", 0);
-//            return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + facebookId));
+//            return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/jeonggyu.park"));
 //        } catch (Exception e) {
 //            // open in browser
 //            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
 //        }
+
     }
 
     public String getUserEmail() {
@@ -246,14 +298,16 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
 
     @Override
     public void onDestroy() {
-        stopLocationFinder();
+        PlusLogger.doIt(getClass().getSimpleName() + " onDestory");
+        dismissProgressDialog();
+        stopLocationListener();
         deleteRecordInServer();
         super.onDestroy();
     }
 
-    private void stopLocationFinder() {
+    private void stopLocationListener() {
         IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
-        locationFinder.removeLocationUpdate();
+        locationFinder.setLocationListener(null);
     }
 
     private void deleteRecordInServer() {

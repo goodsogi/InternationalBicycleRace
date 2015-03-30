@@ -20,6 +20,7 @@ import com.pluslibrary.utils.PlusToaster;
 public class MainActivity extends Activity {
 
     private boolean GPSCatched;
+    private boolean mIsLaunchingActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,28 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mIsLaunchingActivity = false;
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
+        if(locationFinder.isLocationUpdateRemoved()) locationFinder.getCurrentLocation();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(!mIsLaunchingActivity) removeLocationUpdate();
+
+    }
+
+    private void removeLocationUpdate() {
+        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
+        locationFinder.removeLocationUpdate();
+    }
+
     private void goToRacelistActivity() {
+        mIsLaunchingActivity = true;
         Intent intent = new Intent(MainActivity.this, RaceListActivity.class);
         startActivity(intent);
     }
@@ -55,6 +77,7 @@ public class MainActivity extends Activity {
     }
 
     public void launchSettingActivity(View v) {
+        mIsLaunchingActivity = true;
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
@@ -62,14 +85,10 @@ public class MainActivity extends Activity {
 
     @Override
     public void onDestroy() {
-        stopLocationFinder();
+        removeLocationUpdate();
         super.onDestroy();
     }
 
-    private void stopLocationFinder() {
-        IBRLocationFinder locationFinder =IBRLocationFinder.getInstance(this);
-        locationFinder.removeLocationUpdate();
-    }
 
     @Override
     public void onBackPressed() {

@@ -18,6 +18,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.internationalbicyclerace.IBRConstants;
 import com.internationalbicyclerace.R;
 import com.pluslibrary.utils.PlusLogger;
+import com.pluslibrary.utils.PlusToaster;
 
 /**
  * 현재 위치 가져오기
@@ -28,7 +29,7 @@ import com.pluslibrary.utils.PlusLogger;
 public class IBRLocationFinder implements android.location.LocationListener {
 
     private static final int REQUEST_LOCATION_AGREEMENT = 22;
-    private static final String IBR_LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
+    private static final String IBR_LOCATION_PROVIDER = LocationManager.NETWORK_PROVIDER;
     private Activity mActivity;
 	private LocationManager mLocationManager;
 	private String mProvider;
@@ -39,6 +40,7 @@ public class IBRLocationFinder implements android.location.LocationListener {
     private static final long DELAY_TIME = 1000 * 10;
 
     static private IBRLocationListener mListener;
+    private boolean mLocationUpdateRemoved;
 
     private IBRLocationFinder(Activity activity) {
 		mActivity = activity;
@@ -126,6 +128,7 @@ public class IBRLocationFinder implements android.location.LocationListener {
 		// 1000, 10, this);
 		// 네트워크 제공자가 제공하는 위치. GPS를 사용하면 변경 필요!!
 		mIsGpsCatched = false;
+        mLocationUpdateRemoved = false;
 //		mLocationManager.requestLocationUpdates(
 //				LocationManager.GPS_PROVIDER, 3000, 0, this);
 
@@ -133,7 +136,7 @@ public class IBRLocationFinder implements android.location.LocationListener {
                 .getDefaultSharedPreferences(mActivity);
 
         int refreshInterval = getRefreshInterval(Integer.parseInt(preferences
-                .getString(IBRConstants.KEY_PREF_REFRESH_INTERVAL, "1")));
+                .getString(IBRConstants.KEY_PREF_REFRESH_INTERVAL, "0")));
 
         //테스트용
         mLocationManager.requestLocationUpdates(
@@ -169,10 +172,9 @@ public class IBRLocationFinder implements android.location.LocationListener {
     }
 
 
+
     @Override
 	public void onLocationChanged(Location location) {
-
-        PlusLogger.doIt("onLocationChanged");
 
         mIsGpsCatched = true;
         if(mListener != null) mListener.onGPSCatched(location);
@@ -183,6 +185,9 @@ public class IBRLocationFinder implements android.location.LocationListener {
 
     public boolean isGpsCatched() {
         return mIsGpsCatched;
+    }
+    public boolean isLocationUpdateRemoved() {
+        return mLocationUpdateRemoved;
     }
 
 	@Override
@@ -205,6 +210,7 @@ public class IBRLocationFinder implements android.location.LocationListener {
 
     public void removeLocationUpdate() {
         mLocationManager.removeUpdates(this);
+        mLocationUpdateRemoved = true;
     }
 
 

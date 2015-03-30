@@ -60,7 +60,7 @@ public class GetRaceListAdapter extends CommonAdapter<BikerModel> {
 
 
         TextView userSpeed = PlusViewHolder.get(convertView, R.id.userSpeed);
-        userSpeed.setText(mDatas.get(position).getSpeed());
+        userSpeed.setText(getFormattedSpeed(mDatas.get(position).getSpeed()));
 
 
         LinearLayout myContainer = PlusViewHolder.get(convertView, R.id.myContainer);
@@ -81,8 +81,12 @@ public class GetRaceListAdapter extends CommonAdapter<BikerModel> {
         return convertView;
     }
 
+    private String getFormattedSpeed(String speed) {
+        int speedInt = Integer.parseInt(speed);
 
-
+        float result = speedInt/100f;
+        return String.valueOf(result);
+    }
 
 
     private int getMedalResource(int position) {

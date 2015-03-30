@@ -20,6 +20,7 @@
     <string name="help_developer">개발자에게 힘을 주세요</string>
     <string name="vitamin">비타민</string>
     <string name="I_will_make_better_app">욜씸히 앱 만들겠습니다!</string>
+    <string name="updating_rank">순위 갱신 중...</string>
 
     <string-array name="refreshInterval">
         <item>1초</item>
