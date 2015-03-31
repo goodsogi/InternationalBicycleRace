@@ -6,10 +6,13 @@ package com.internationalbicyclerace.server;
 public class BikerModel {
     private String name;
     private String email;
+    private String facebookProfileLink;
     private String nationality;
     private String profileImageUrl;
     private String speed;
     private String facebookId;
+    private boolean isFacebookProfileOpen;
+
 
 
     public String getName() {
@@ -58,5 +61,21 @@ public class BikerModel {
 
     public void setFacebookId(String facebookId) {
         this.facebookId = facebookId;
+    }
+
+    public String getFacebookProfileLink() {
+        return facebookProfileLink;
+    }
+
+    public void setFacebookProfileLink(String facebookProfileLink) {
+        this.facebookProfileLink = facebookProfileLink;
+    }
+
+    public boolean getIsFacebookProfileOpen() {
+        return isFacebookProfileOpen;
+    }
+
+    public void setIsFacebookProfileOpen(boolean isFacebookProfileOpen) {
+        this.isFacebookProfileOpen = isFacebookProfileOpen;
     }
 }

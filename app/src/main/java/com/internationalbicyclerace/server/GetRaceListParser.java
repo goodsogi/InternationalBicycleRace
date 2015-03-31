@@ -28,9 +28,11 @@ public class GetRaceListParser {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 data.setName(jsonObject.optString("name"));
                 data.setEmail(jsonObject.optString("email"));
+                data.setFacebookProfileLink(jsonObject.optString("facebookProfileLink"));
                 data.setProfileImageUrl(jsonObject.optString("profileImage"));
                 data.setSpeed(jsonObject.optString("speed"));
                 data.setFacebookId(jsonObject.optString("facebookId"));
+                data.setIsFacebookProfileOpen(Boolean.parseBoolean(jsonObject.optString("isFacebookProfileOpen")));
                 model.add(data);
             }
 

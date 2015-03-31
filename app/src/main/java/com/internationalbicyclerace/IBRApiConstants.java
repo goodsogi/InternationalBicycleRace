@@ -12,4 +12,5 @@ public class IBRApiConstants {
     public static final String GET_RACE_LIST =  API_MAIN + "GetRaceList.jsp";
     public static final String DELETE_RACE_RECORD = API_MAIN + "DeleteRaceRecord.jsp";
     public static final String UPDATE_SPEED_IN_SERVER = API_MAIN + "UpdateSpeed.jsp";
+    public static final String UPDATE_FACEBOOK_PROFILE_POLICY = API_MAIN + "UpdateFacebookProfilePolicy.jsp";
 }

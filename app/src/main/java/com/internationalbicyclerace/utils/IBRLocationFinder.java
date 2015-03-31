@@ -29,7 +29,7 @@ import com.pluslibrary.utils.PlusToaster;
 public class IBRLocationFinder implements android.location.LocationListener {
 
     private static final int REQUEST_LOCATION_AGREEMENT = 22;
-    private static final String IBR_LOCATION_PROVIDER = LocationManager.NETWORK_PROVIDER;
+    private static final String IBR_LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
     private Activity mActivity;
 	private LocationManager mLocationManager;
 	private String mProvider;
@@ -154,6 +154,8 @@ public class IBRLocationFinder implements android.location.LocationListener {
 //
 //            }
 //        }, DELAY_TIME);
+
+
 
 	}
 

@@ -222,7 +222,7 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showFacebookPage((datas.get(position).getFacebookId()));
+                if(datas.get(position).getIsFacebookProfileOpen()) showFacebookPage((datas.get(position).getFacebookProfileLink()));
             }
         });
 
@@ -251,8 +251,8 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
         return 0;
     }
 
-    private void showFacebookPage(String facebookId) {
-        Intent intent =getOpenFacebookIntent(facebookId);
+    private void showFacebookPage(String link) {
+        Intent intent =getOpenFacebookIntent(link);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY
                 | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         startActivity(intent);
@@ -263,21 +263,23 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
 //        startActivity(intent);
     }
 
-    private Intent getOpenFacebookIntent(String facebookId) {
+    private Intent getOpenFacebookIntent(String link) {
 
-//        return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
+       return new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+        //아래 코드를 사용하면 웹과 앱 중에 선택할 수 있는데 둘다 프로필이 열리는 문제점이 있음
+        //return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
 
         //fb://page/" + facebookId가 프로필 페이지가 열리지 않음, fb://profile/" + facebookId는 이용할 수 없다고 나옴
-        try{
-            // open in Facebook app
-            getPackageManager().getPackageInfo("com.facebook.katana", 0);
-            final String facebookScheme = String.format("fb://profile/%s", facebookId);
-            return new Intent(Intent.ACTION_VIEW, Uri.parse(facebookScheme));
-
-        } catch (Exception e) {
-            // open in browser
-            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
-        }
+//        try{
+//            // open in Facebook app
+//            getPackageManager().getPackageInfo("com.facebook.katana", 0);
+//            final String facebookScheme = String.format("fb://page/%s/", facebookId);
+//            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
+//
+//        } catch (Exception e) {
+//            // open in browser
+//            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/app_scoped_user_id/10153193702113944/"));
+//        }
 
 //        try{
 //            // open in Facebook app
@@ -287,6 +289,8 @@ public class RaceListActivity extends Activity implements IBRLocationListener {
 //            // open in browser
 //            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" +facebookId));
 //        }
+
+
 
     }
 

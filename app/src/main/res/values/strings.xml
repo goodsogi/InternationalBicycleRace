@@ -21,6 +21,9 @@
     <string name="vitamin">Vitamin</string>
     <string name="I_will_make_better_app">I will make good apps!</string>
     <string name="updating_rank">Updating rank...</string>
+    <string name="categoryFacebookProfile">Facebook Profile</string>
+    <string name="facebookProfile">Facebook Profile</string>
+    <string name="openFacebookProfile">Open my Facebook Profile</string>
 
     <string-array name="refreshInterval">
         <item>1sec</item>

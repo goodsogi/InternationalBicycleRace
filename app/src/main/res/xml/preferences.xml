@@ -9,6 +9,13 @@
             android:summary="@string/choose_rank_refresh_interval"
             android:title="@string/interval" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/categoryFacebookProfile" >
+        <CheckBoxPreference
+            android:key="prefFacebookProfile"
+            android:title="@string/facebookProfile"
+            android:summary="@string/openFacebookProfile"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/donation" >
         <Preference
             android:key="button"

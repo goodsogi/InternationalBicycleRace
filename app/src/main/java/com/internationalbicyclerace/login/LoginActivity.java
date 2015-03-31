@@ -91,6 +91,8 @@ public class LoginActivity extends Activity {
         params.put("facebookId", model.getFacebookId());
         params.put("name", model.getName());
         params.put("profileImageUrl", model.getProfileImageUrl());
+        params.put("facebookProfileLink", model.getFacebookProfileLink());
+        params.put("isFacebookProfileOpen", true);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post(IBRApiConstants.SEND_USER_INFO_TO_SERVER, params, new JsonHttpResponseHandler() {
@@ -136,11 +138,11 @@ public class LoginActivity extends Activity {
         if (graphObject != null) {
             JSONObject jsonObject = graphObject.getInnerJSONObject();
 
-            //수정이 필요할 수 있음!!
             model.setFacebookId(jsonObject.optString("id"));
             model.setName(jsonObject.optString("name"));
             model.setEmail(jsonObject.optString("email"));
             model.setProfileImageUrl("http://graph.facebook.com/"+jsonObject.optString("id")+"/picture?type=large");
+            model.setFacebookProfileLink(jsonObject.optString("link"));
 
 
         }

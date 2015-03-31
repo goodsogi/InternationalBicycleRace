@@ -16,14 +16,20 @@ import android.util.Log;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.internationalbicyclerace.IBRApiConstants;
 import com.internationalbicyclerace.IBRConstants;
 import com.internationalbicyclerace.R;
 import com.internationalbicyclerace.inapp.IabHelper;
 import com.internationalbicyclerace.inapp.IabResult;
 import com.internationalbicyclerace.inapp.Purchase;
 import com.internationalbicyclerace.utils.IBRLocationFinder;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.pluslibrary.utils.PlusToaster;
 
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -225,10 +231,19 @@ public class SettingActivity extends PreferenceActivity implements
 		});
 
 		initRefreshInterval();
+        initFacebookProfileCheckBox();
 
 	}
 
-	public void buy(String id_item) {
+    private void initFacebookProfileCheckBox() {
+        Preference facebookProfile = findPreference(IBRConstants.KEY_PREF_FACEBOOK_PROFILE);
+        boolean isChecked = getPreferenceScreen()
+                .getSharedPreferences().getBoolean(
+                        IBRConstants.KEY_PREF_FACEBOOK_PROFILE, true);
+        facebookProfile.setDefaultValue(isChecked);
+    }
+
+    public void buy(String id_item) {
 		// Var.ind_item = index;
 		try {
 			Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
@@ -323,7 +338,14 @@ public class SettingActivity extends PreferenceActivity implements
 
             setLocationFinderRefreshInterval(position);
 
-		}
+		} else if (key.equals(IBRConstants.KEY_PREF_FACEBOOK_PROFILE)) {
+            Preference refreshInterval = findPreference(key);
+            boolean isChecked =sharedPreferences
+                    .getBoolean(key, true);
+
+            sendFacebookProfilePolicyToServer(isChecked);
+
+        }
 		// else if (key.equals(PBNConstants.KEY_PREF_ZOOM_LEVEL)) {
 		// eventLabel = "keep_draft";
 		// boolean value = sharedPreferences.getBoolean(key, false);
@@ -331,6 +353,42 @@ public class SettingActivity extends PreferenceActivity implements
 		//
 		// }
 	}
+
+    private void sendFacebookProfilePolicyToServer(boolean isChecked) {
+
+        RequestParams params = new RequestParams();
+        params.put("userEmail", getUserEmail());
+        params.put("isFacebookProfileOpen", isChecked);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+
+        client.post(IBRApiConstants.UPDATE_FACEBOOK_PROFILE_POLICY, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONObject response) {
+                // 서버 결과가 success이면 경주 순위 데이터 가져옴
+                if (response.opt("result").equals("success")) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+
+            }
+
+
+        });
+
+    }
+
+    public String getUserEmail() {
+        SharedPreferences sharedPreference = getSharedPreferences(
+                IBRConstants.PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreference.getString(IBRConstants.KEY_USER_EMAIL, "");
+    }
+
 
     private void setLocationFinderRefreshInterval(int position) {
         IBRLocationFinder locationFinder = IBRLocationFinder.getInstance(this);

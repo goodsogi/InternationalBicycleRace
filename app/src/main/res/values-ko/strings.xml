@@ -21,6 +21,9 @@
     <string name="vitamin">비타민</string>
     <string name="I_will_make_better_app">욜씸히 앱 만들겠습니다!</string>
     <string name="updating_rank">순위 갱신 중...</string>
+    <string name="categoryFacebookProfile">페이스북 프로필</string>
+    <string name="facebookProfile">페이스북 프로필</string>
+    <string name="openFacebookProfile">내 페이스북 프로필을 모두에게 공개</string>
 
     <string-array name="refreshInterval">
         <item>1초</item>
